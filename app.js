@@ -640,3 +640,4 @@ sb.auth.onAuthStateChange((_event, session) => {
 
 restoreAuthSession();
 loadPosts();
+
