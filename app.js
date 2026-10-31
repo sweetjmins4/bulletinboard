@@ -436,6 +436,13 @@ async function loadPostDetail(postId) {
   detailTitle.textContent = post.title;
   detailNickname.textContent = `작성자: ${profile.nickname}`;
   detailContent.textContent = post.content;
+  pageHeader.hidden = true;
+  searchForm.hidden = true;
+  statusMessage.hidden = true;
+  boardSection.hidden = true;
+  myPostsSection.hidden = true;
+  myCommentsSection.hidden = true;
+  postWritePanel.hidden = true;
   postDetail.hidden = false;
   selectedPostId = post.id;
   showStatus("게시글 내용을 표시합니다.");
@@ -599,6 +606,7 @@ searchForm.addEventListener("submit", (event) => {
 closeDetailButton.addEventListener("click", () => {
   postDetail.hidden = true;
   selectedPostId = null;
+  showAllPosts();
 });
 
 commentForm.addEventListener("submit", submitComment);
