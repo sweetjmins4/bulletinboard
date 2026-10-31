@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시판</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="page-container">
+      <header class="page-header">
+        <div class="header-top">
+          <div>
+            <p class="eyebrow">BULLETIN BOARD</p>
+            <h1>게시글 목록</h1>
+          </div>
+          <div class="auth-actions">
+            <div id="signedOutArea" class="auth-action-group">
+              <button id="openWritePostButton" class="secondary-button" type="button">글 작성</button>
+              <button id="openSignUpButton" class="secondary-button" type="button">회원가입</button>
+              <button id="openSignInButton" type="button">로그인</button>
+            </div>
+            <div id="signedInArea" class="auth-action-group signed-in-actions" hidden>
+              <span id="loggedInEmail" class="logged-in-email"></span>
+              <button id="myPostsButton" class="secondary-button" type="button">내 게시글</button>
+              <button id="myCommentsButton" class="secondary-button" type="button">내 댓글</button>
+              <button id="openWritePostButtonLoggedIn" class="secondary-button" type="button">글 작성</button>
+              <button id="signOutButton" class="secondary-button" type="button">로그아웃</button>
+            </div>
+          </div>
+        </div>
+        <p>제목으로 원하는 게시글을 찾아보세요.</p>
+      </header>
+
+      <section id="authPanel" class="auth-section" aria-label="회원 기능" hidden>
+        <div class="auth-panel-header">
+          <h2 id="authPanelTitle">회원가입</h2>
+          <button id="closeAuthPanelButton" class="close-button" type="button">닫기</button>
+        </div>
+        <form id="signUpForm" class="auth-form">
+          <label for="signUpEmail">이메일</label>
+          <input id="signUpEmail" type="email" autocomplete="email" required />
+          <label for="signUpPassword">비밀번호</label>
+          <input id="signUpPassword" type="password" autocomplete="new-password" minlength="6" required />
+          <button id="signUpButton" type="submit">회원가입</button>
+        </form>
+        <form id="signInForm" class="auth-form" hidden>
+          <label for="signInEmail">이메일</label>
+          <input id="signInEmail" type="email" autocomplete="email" required />
+          <label for="signInPassword">비밀번호</label>
+          <input id="signInPassword" type="password" autocomplete="current-password" required />
+          <button id="signInButton" type="submit">로그인</button>
+        </form>
+        <p id="authMessage" class="auth-message" aria-live="polite"></p>
+      </section>
+
+      <section id="postWritePanel" class="post-write-panel" aria-label="게시글 작성" hidden>
+        <div class="auth-panel-header">
+          <h2>게시글 작성</h2>
+          <button id="closeWritePostButton" class="close-button" type="button">닫기</button>
+        </div>
+        <form id="postWriteForm" class="post-write-form">
+          <label for="postTitleInput">제목</label>
+          <input id="postTitleInput" type="text" maxlength="200" required />
+          <label for="postContentInput">내용</label>
+          <textarea id="postContentInput" rows="8" required></textarea>
+          <button id="postWriteButton" type="submit">게시글 등록</button>
+        </form>
+        <p id="postWriteStatus" class="auth-message" aria-live="polite"></p>
+      </section>
+
+      <form id="searchForm" class="search-form">
+        <label for="searchInput">게시글 제목 검색</label>
+        <div class="search-controls">
+          <input id="searchInput" type="search" placeholder="검색할 제목을 입력하세요" autocomplete="off" />
+          <button type="submit">검색</button>
+        </div>
+      </form>
+
+      <p id="statusMessage" class="status-message" aria-live="polite">게시글을 불러오는 중입니다.</p>
+
+      <section id="boardSection" class="board-section" aria-label="게시글 목록">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">닉네임</th>
+              </tr>
+            </thead>
+            <tbody id="postList"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="myPostsSection" class="my-posts-section" aria-label="내 게시글" hidden>
+        <div class="personal-list-header">
+          <h2>내 게시글</h2>
+          <button id="backFromMyPostsButton" class="secondary-button" type="button">전체 목록 보기</button>
+        </div>
+        <p id="myPostsStatus" class="status-message" aria-live="polite"></p>
+        <ul id="myPostsList" class="my-posts-list"></ul>
+      </section>
+
+      <section id="myCommentsSection" class="my-posts-section" aria-label="내 댓글" hidden>
+        <div class="personal-list-header">
+          <h2>내 댓글</h2>
+          <button id="backFromMyCommentsButton" class="secondary-button" type="button">전체 목록 보기</button>
+        </div>
+        <p id="myCommentsStatus" class="status-message" aria-live="polite"></p>
+        <ul id="myCommentsList" class="my-posts-list"></ul>
+      </section>
+
+      <section id="postDetail" class="post-detail" hidden aria-live="polite">
+        <div class="detail-header">
+          <div>
+            <p class="detail-label">게시글 상세</p>
+            <h2 id="detailTitle"></h2>
+            <p id="detailNickname" class="detail-nickname"></p>
+          </div>
+          <button id="closeDetailButton" class="close-button" type="button" aria-label="게시글 상세 닫기">닫기</button>
+        </div>
+        <p id="detailContent" class="detail-content"></p>
+
+        <section class="comments-section" aria-label="댓글">
+          <h3>댓글</h3>
+          <p id="commentStatus" class="comment-status" aria-live="polite"></p>
+          <ul id="commentList" class="comment-list"></ul>
+
+          <form id="commentForm" class="comment-form">
+            <label for="commentInput">댓글 내용</label>
+            <textarea id="commentInput" rows="3" maxlength="500" placeholder="로그인한 회원만 댓글을 남길 수 있습니다." required></textarea>
+            <button type="submit">댓글 등록</button>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <!-- 실행 순서: SDK → config.js → app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
