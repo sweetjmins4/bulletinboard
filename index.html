@@ -3,141 +3,127 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>게시판</title>
+    <title>온라인 서점</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main class="page-container">
-      <header class="page-header">
-        <div class="header-top">
-          <div>
-            <p class="eyebrow">BULLETIN BOARD</p>
-            <h1>게시글 목록</h1>
-          </div>
-          <div class="auth-actions">
-            <div id="signedOutArea" class="auth-action-group">
-              <button id="openWritePostButton" class="secondary-button" type="button">글 작성</button>
-              <button id="openSignUpButton" class="secondary-button" type="button">회원가입</button>
-              <button id="openSignInButton" type="button">로그인</button>
-            </div>
-            <div id="signedInArea" class="auth-action-group signed-in-actions" hidden>
-              <span id="loggedInEmail" class="logged-in-email"></span>
-              <button id="myPostsButton" class="secondary-button" type="button">내 게시글</button>
-              <button id="myCommentsButton" class="secondary-button" type="button">내 댓글</button>
-              <button id="openWritePostButtonLoggedIn" class="secondary-button" type="button">글 작성</button>
-              <button id="signOutButton" class="secondary-button" type="button">로그아웃</button>
-            </div>
-          </div>
-        </div>
-        <p>제목으로 원하는 게시글을 찾아보세요.</p>
-      </header>
+    <div class="top-bar">
+      <button id="cartButton" class="cart-button" type="button" aria-label="장바구니 열기">
+        🛒 <span id="cartCount" class="cart-count">0</span>
+      </button>
+      <button id="ordersButton" class="orders-button" type="button" hidden>주문내역</button>
+      <button id="openAuthButton" class="login-button" type="button">로그인</button>
+      <div id="memberArea" class="member-area" hidden>
+        <span id="memberEmail"></span>
+        <button id="signOutButton" type="button">로그아웃</button>
+      </div>
+    </div>
 
-      <section id="authPanel" class="auth-section" aria-label="회원 기능" hidden>
-        <div class="auth-panel-header">
-          <h2 id="authPanelTitle">회원가입</h2>
-          <button id="closeAuthPanelButton" class="close-button" type="button">닫기</button>
-        </div>
-        <form id="signUpForm" class="auth-form">
-          <label for="signUpEmail">이메일</label>
-          <input id="signUpEmail" type="email" autocomplete="email" required />
-          <label for="signUpPassword">비밀번호</label>
-          <input id="signUpPassword" type="password" autocomplete="new-password" minlength="6" required />
-          <button id="signUpButton" type="submit">회원가입</button>
-        </form>
-        <form id="signInForm" class="auth-form" hidden>
-          <label for="signInEmail">이메일</label>
-          <input id="signInEmail" type="email" autocomplete="email" required />
-          <label for="signInPassword">비밀번호</label>
-          <input id="signInPassword" type="password" autocomplete="current-password" required />
-          <button id="signInButton" type="submit">로그인</button>
-        </form>
-        <p id="authMessage" class="auth-message" aria-live="polite"></p>
-      </section>
+    <main class="store-layout">
+      <aside class="sidebar" aria-label="도서 분류">
+        <header class="brand-header">
+          <h1>베스트</h1>
+          <span>더보기 +</span>
+        </header>
+        <nav class="category-nav">
+          <a class="active" href="#bookList">전체</a>
+          <a href="#bookList">국내도서</a>
+          <a href="#bookList">외국도서</a>
+          <a href="#bookList">eBook</a>
+          <a href="#bookList">sam</a>
+          <a href="#bookList">핫트랙스</a>
+          <a href="#bookList">교보Only</a>
+          <strong>스테디셀러</strong>
+          <a href="#bookList">국내도서</a>
+          <a href="#bookList">외국도서</a>
+        </nav>
+      </aside>
 
-      <section id="postWritePanel" class="post-write-panel" aria-label="게시글 작성" hidden>
-        <div class="auth-panel-header">
-          <h2>게시글 작성</h2>
-          <button id="closeWritePostButton" class="close-button" type="button">닫기</button>
-        </div>
-        <form id="postWriteForm" class="post-write-form">
-          <label for="postTitleInput">제목</label>
-          <input id="postTitleInput" type="text" maxlength="200" required />
-          <label for="postContentInput">내용</label>
-          <textarea id="postContentInput" rows="8" required></textarea>
-          <button id="postWriteButton" type="submit">게시글 등록</button>
-        </form>
-        <p id="postWriteStatus" class="auth-message" aria-live="polite"></p>
-      </section>
+      <section class="content-area">
+        <header class="page-header">
+          <p class="eyebrow">ONLINE BOOKSTORE</p>
+          <h2>이번 주 도서</h2>
+          <p class="intro">읽고 싶은 책을 찾아 모의 구매해 보세요.</p>
+        </header>
 
       <form id="searchForm" class="search-form">
-        <label for="searchInput">게시글 제목 검색</label>
-        <div class="search-controls">
-          <input id="searchInput" type="search" placeholder="검색할 제목을 입력하세요" autocomplete="off" />
+        <label for="searchInput">도서 제목 검색</label>
+        <div class="search-row">
+          <input
+            id="searchInput"
+            name="search"
+            type="search"
+            placeholder="예: 업무 자동화"
+            autocomplete="off"
+          />
           <button type="submit">검색</button>
         </div>
       </form>
 
-      <p id="statusMessage" class="status-message" aria-live="polite">게시글을 불러오는 중입니다.</p>
+      <p id="purchaseMessage" class="purchase-message" aria-live="polite"></p>
+      <p id="statusMessage" class="status-message" aria-live="polite"></p>
+      <section id="bookList" class="book-list" aria-label="도서 목록"></section>
 
-      <section id="boardSection" class="board-section" aria-label="게시글 목록">
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col">제목</th>
-                <th scope="col">닉네임</th>
-              </tr>
-            </thead>
-            <tbody id="postList"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="myPostsSection" class="my-posts-section" aria-label="내 게시글" hidden>
-        <div class="personal-list-header">
-          <h2>내 게시글</h2>
-          <button id="backFromMyPostsButton" class="secondary-button" type="button">전체 목록 보기</button>
-        </div>
-        <p id="myPostsStatus" class="status-message" aria-live="polite"></p>
-        <ul id="myPostsList" class="my-posts-list"></ul>
-      </section>
-
-      <section id="myCommentsSection" class="my-posts-section" aria-label="내 댓글" hidden>
-        <div class="personal-list-header">
-          <h2>내 댓글</h2>
-          <button id="backFromMyCommentsButton" class="secondary-button" type="button">전체 목록 보기</button>
-        </div>
-        <p id="myCommentsStatus" class="status-message" aria-live="polite"></p>
-        <ul id="myCommentsList" class="my-posts-list"></ul>
-      </section>
-
-      <section id="postDetail" class="post-detail" hidden aria-live="polite">
-        <div class="detail-header">
-          <div>
-            <p class="detail-label">게시글 상세</p>
-            <h2 id="detailTitle"></h2>
-            <p id="detailNickname" class="detail-nickname"></p>
-          </div>
-          <button id="closeDetailButton" class="close-button" type="button" aria-label="게시글 상세 닫기">닫기</button>
-        </div>
-        <p id="detailContent" class="detail-content"></p>
-
-        <section class="comments-section" aria-label="댓글">
-          <h3>댓글</h3>
-          <p id="commentStatus" class="comment-status" aria-live="polite"></p>
-          <ul id="commentList" class="comment-list"></ul>
-
-          <form id="commentForm" class="comment-form">
-            <label for="commentInput">댓글 내용</label>
-            <textarea id="commentInput" rows="3" maxlength="500" placeholder="로그인한 회원만 댓글을 남길 수 있습니다." required></textarea>
-            <button type="submit">댓글 등록</button>
-          </form>
-        </section>
       </section>
     </main>
 
-    <!-- 실행 순서: SDK → config.js → app.js -->
+    <div id="authModal" class="auth-modal" hidden>
+      <section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+        <button id="closeAuthButton" class="close-auth-button" type="button" aria-label="로그인 창 닫기">×</button>
+        <header class="auth-logo">
+          <span class="auth-leaf">●</span>
+          <h2 id="authTitle">BOOK 서점</h2>
+        </header>
+        <p id="authMessage" class="auth-message" aria-live="polite"></p>
+
+        <div id="guestArea">
+          <form id="signInForm" class="auth-form">
+            <label class="sr-only" for="signInEmail">이메일</label>
+            <input id="signInEmail" type="email" placeholder="이메일" required autocomplete="email" />
+            <label class="sr-only" for="signInPassword">비밀번호</label>
+            <input id="signInPassword" type="password" placeholder="비밀번호" required autocomplete="current-password" />
+            <button type="submit" class="auth-submit">로그인</button>
+            <p class="auth-switch">처음이신가요? <button id="showSignUpButton" type="button">회원가입</button></p>
+          </form>
+
+          <form id="signUpForm" class="auth-form" hidden>
+            <label class="sr-only" for="signUpEmail">이메일</label>
+            <input id="signUpEmail" type="email" placeholder="이메일" required autocomplete="email" />
+            <label class="sr-only" for="signUpPassword">비밀번호</label>
+            <input id="signUpPassword" type="password" placeholder="비밀번호 (6자 이상)" required minlength="6" autocomplete="new-password" />
+            <button type="submit" class="auth-submit">회원가입</button>
+            <p class="auth-switch">이미 회원이신가요? <button id="showSignInButton" type="button">로그인</button></p>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <div id="cartModal" class="cart-modal" hidden>
+      <section class="cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+        <header class="cart-header">
+          <h2 id="cartTitle">장바구니</h2>
+          <button id="closeCartButton" class="close-cart-button" type="button" aria-label="장바구니 닫기">×</button>
+        </header>
+        <p id="cartMessage" class="cart-message" aria-live="polite"></p>
+        <section id="cartList" class="cart-list" aria-label="장바구니 도서 목록"></section>
+        <button id="checkoutCartButton" class="checkout-cart-button" type="button">구매 진행</button>
+      </section>
+    </div>
+
+    <div id="ordersModal" class="orders-modal" hidden>
+      <section class="orders-dialog" role="dialog" aria-modal="true" aria-labelledby="ordersTitle">
+        <header class="orders-dialog-header">
+          <h2 id="ordersTitle">내 주문</h2>
+          <button id="closeOrdersButton" class="close-cart-button" type="button" aria-label="주문 내역 닫기">×</button>
+        </header>
+        <section id="ordersSection" class="orders-section" aria-label="내 주문 목록">
+          <p id="ordersMessage" class="orders-message" aria-live="polite"></p>
+          <section id="ordersList" class="orders-list" aria-label="내 주문 목록"></section>
+        </section>
+      </section>
+    </div>
+
+    <!-- SDK → 설정 → 화면 동작 순서로 불러옵니다. -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./config.js"></script>
     <script src="./app.js"></script>
